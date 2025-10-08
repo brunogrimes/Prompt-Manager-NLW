@@ -13,7 +13,25 @@
 </head>
 <body>
     <div class="app">
-        <aside class="sidebar"></aside>
+        <button class="icon-button open-toggle" id="btn-open">
+            <img src="assets/open.svg" alt="Abrir Menu" class="icon" />
+        </button>
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <img src="assets/logo.svg" alt="Logo" class="logo" />
+                <button class="icon-button" id="btn-collapse">
+                    <img src="assets/collapse.svg" alt="Fechar menu" class="icon" />
+            </header>
+
+            <div class="sidebar-content">
+                <div class="search-container">
+                        <img src="assets/search.svg" alt="Buscar" class="search-icon"/>
+                    <input type="text" class="search-input" id="search-input" placeholder="Buscar por título" />
+                    <button class="btn-primary btn btn-full" id="btn-new">+ Novo prompt</button>
+                </div>
+                <div class="search-divider"></div>
+            </div>
+        </aside>
         
         
         <main class="main">
@@ -25,12 +43,12 @@
                 <button id="btn-save" class="btn-primary btn w-150">Salvar</button>
             </header>
 
-            <div data-placeholder="Título do prompt" class="editable-wrapper"> 
+            <div data-placeholder="Título do prompt" class="editable-wrapper" id="title-wrapper"> 
             <h1 id="prompt-title" class="prompt-title" contenteditable="true">⚡ Planejamento de tarefas semanais
 
             </h1>
             </div>
-            <div data-placeholder="Conteúdo do prompt ..." class="editable-wrapper">
+            <div data-placeholder="Conteúdo do prompt ..." class="editable-wrapper" id="content-wrapper">
             <div id="prompt-content" class="prompt-content" contenteditable="true">
                 Me ajude a organizar minha semana de forma equilibrada.<br>
                 Distribua minhas tarefas profissionais e pessoais em blocos de tempo realistas.<br>
