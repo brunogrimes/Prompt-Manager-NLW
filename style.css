@@ -129,13 +129,13 @@ body{
 .editable-wrapper.is-empty::before{
     opacity: 1;
 }
-#title-wrapper.is-empty {
-    font-size: 32px;
+#title-wrapper.is-empty::before {
+    font-size: 32px; /* Aumenta o tamanho para título */
     font-weight: 600;
     color: var(--gray-200);
 }
-#title-wrapper.is-empty {
-    font-size: 16px;
+#content-wrapper.is-empty::before {
+    font-size: 16px; /* Volta ao tamanho normal de texto */
     color: var(--gray-200);
     line-height: 32px;
 }
@@ -225,6 +225,24 @@ body{
     gap: 16px;
     cursor: pointer;
 }
+.prompt-item.selected {
+    background-color: var(--gray-700); /* Cor de fundo sutil para indicar seleção */
+    border-radius: 6px;
+    padding: 8px 10px; /* Adiciona um padding para melhor visualização */
+    margin-top: 10px; /* Ajusta o margin-top */
+    transition: background-color 0.15s;
+}
+/* Ajuste o .prompt-item para a seleção */
+.prompt-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px; 
+    padding: 8px 10px;
+    gap: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+}
 .prompt-item-content {              /*Conteúdo dos itens da lista de prompts*/ 
     display: flex;
     flex-direction: column;
@@ -278,6 +296,7 @@ body{
         display: block;
         top: 38px;
     }
+
     .sidebar {
         position: fixed;
         top: 0;
@@ -288,15 +307,18 @@ body{
         transform: translateX(-100%);
         z-index: 1100;
     }
+
     .sidebar.collapsed {
         width: 0;
         padding: 0;
         opacity: 0;
         transform: translateX(0);
     }
+
     .sidebar.open {
         transform: translateX(0);
     }
+
     .main {
         padding: 24px 32px;
         margin-left: 0;

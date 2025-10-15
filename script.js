@@ -26,6 +26,22 @@ function updateEditableWrapperState(element, wrapper) {
     wrapper.classList.toggle('is-empty', !hasText)
 }
 
+// Função para abrir a sidebar
+function openSidebar() {
+	elements.sidebar.classList.add("open")
+	elements.sidebar.classList.remove("collapsed")
+	elements.sidebar.style.display = "flex";
+	elements.btnOpen.style.display = "none";
+}
+
+// Função para fechar a sidebar
+function closeSidebar() {
+	elements.sidebar.classList.remove("open")
+	elements.sidebar.classList.add("collapsed")
+	elements.sidebar.style.display = "none";
+	elements.btnOpen.style.display = "block";
+}
+
 // Atualiza o estado de todos os elementos editáveis
 function updateAllEditableSltates() {
 	updateEditableWrapperState(elements.promptTitle, elements.titleWrapper)
@@ -44,20 +60,20 @@ function attachAllEditableHandlers() {
 	updateAllEditableSltates()
 }
 
-// Função para abrir a sidebar
-function openSidebar() {
-	elements.sidebar.classList.add("open")
-	elements.sidebar.classList.remove("collapsed")
-	elements.sidebar.style.display = "flex";
-	elements.btnOpen.style.display = "none";
-}
-
-// Função para fechar a sidebar
-function closeSidebar() {
-	elements.sidebar.classList.remove("open")
-	elements.sidebar.classList.add("collapsed")
-	elements.sidebar.style.display = "none";
-    elements.btnOpen.style.display = "block";
+function showTemporaryFeedback(button, originalText, feedbackText) {
+    const span = button.querySelector('span');
+    if (span) {
+        span.textContent = feedbackText;
+    } else {
+        button.textContent = feedbackText;
+    }
+    setTimeout(() => {
+        if (span) {
+            span.textContent = originalText;
+        } else {
+            button.textContent = originalText;
+        }
+    }, 1500); // 1.5 segundos
 }
 // Salva ou atualiza um prompt
 function save() {
@@ -66,7 +82,7 @@ function save() {
 	const hasContent = elements.promptContent.textContent.trim()
 
 	if (!title|| !hasContent) {
-		alert("Por favor, preencha o título e o conteúdo do prompt antes de salvar.")
+		alert("O título e o conteúdo não podem estar vazios.")
 		return
 	}
 
@@ -88,7 +104,8 @@ function save() {
 
 	renderList(elements.search.value)
 	persist()
-	alert("Prompt salvo com sucesso!")
+	showTemporaryFeedback(elements.btnSave, "Salvar", "Salvo!");
+	// alert("Prompt salvo com sucesso!")
 }
 
 function persist() {  // Salva os prompts no localStorage
@@ -149,7 +166,7 @@ function copySelected(){
 	try {
 		const content = elements.promptContent
 		if (!navigator.clipboard) {
-			console.log("A API Clipboard não é suportada neste navegador.")
+			console.error("A API Clipboard não é suportada neste navegador.")
 			return
 		}
 		if (!content.innerText.trim()) {
@@ -158,7 +175,7 @@ function copySelected(){
 		}
 
 		navigator.clipboard.writeText(content.innerText)
-		
+		showTemporaryFeedback(elements.btnCopy, "Copiar", "Copiado!");
 	} catch (error) {
 		console.log("Erro ao copiar para a área de transferência:", error)
 	}
@@ -192,7 +209,11 @@ elements.list.addEventListener("click", function (event) {
 	}
 
 	if(event.target.closest("[data-action='select']")) {  
-		//Seleciona item	
+
+		elements.list.querySelectorAll('.prompt-item').forEach(el => {
+            el.classList.remove('selected');
+        });
+        item.classList.add('selected');	
 		const prompt = state.prompts.find((p) => p.id === id)
 	
 		if(prompt) {
@@ -200,6 +221,9 @@ elements.list.addEventListener("click", function (event) {
 		elements.promptContent.innerHTML = prompt.content
 		updateAllEditableSltates()
 		}
+		if (window.innerWidth <= 950) {
+            closeSidebar();
+        }
 	}
 })
 
@@ -210,8 +234,8 @@ function init() {
 	attachAllEditableHandlers()
 	updateAllEditableSltates()
 	// Estado inicial: sidebar visível, botão open oculto
-	elements.sidebar.style.display = '';
-	elements.btnOpen.style.display = 'none';
+	// elements.sidebar.style.display = '';
+	// elements.btnOpen.style.display = 'none';
 
 	elements.sidebar.classList.remove("open")
 	elements.sidebar.classList.remove("collapsed")
