@@ -14,6 +14,7 @@ const elements = {
 	btnSave: document.getElementById('btn-save'),
     btnCollapse: document.getElementById('btn-collapse'),
 	bntNew: document.getElementById('btn-new'),
+	btnCopy: document.getElementById('btn-copy'),
     sidebar: document.querySelector('.sidebar'),
 	list: document.getElementById('prompt-list'),
 	search: document.getElementById('search-input'),
@@ -45,15 +46,20 @@ function attachAllEditableHandlers() {
 
 // Função para abrir a sidebar
 function openSidebar() {
+	elements.sidebar.classList.add("open")
+	elements.sidebar.classList.remove("collapsed")
 	elements.sidebar.style.display = "flex";
 	elements.btnOpen.style.display = "none";
 }
 
 // Função para fechar a sidebar
 function closeSidebar() {
+	elements.sidebar.classList.remove("open")
+	elements.sidebar.classList.add("collapsed")
 	elements.sidebar.style.display = "none";
     elements.btnOpen.style.display = "block";
 }
+// Salva ou atualiza um prompt
 function save() {
 	const title = elements.promptTitle.textContent.trim()
 	const content = elements.promptContent.innerHTML.trim()
@@ -85,14 +91,15 @@ function save() {
 	alert("Prompt salvo com sucesso!")
 }
 
-function persist() {
+function persist() {  // Salva os prompts no localStorage
 	try {
 		localStorage.setItem(storageKey, JSON.stringify(state.prompts))
 	} catch (error) {
 		console.log("Erro ao salvar no localStorage:", error)
 	}
 }
-function load() {
+
+function load() { 	// Carrega os prompts do localStorage
 	try {
 		const storage = localStorage.getItem(storageKey)
 		state.prompts = storage ? JSON.parse(storage) : []
@@ -101,14 +108,17 @@ function load() {
 		console.log("Erro ao carregar do localStorage:", error)
 	}
 }
-
+ 	// Cria o HTML para um item de prompt
 function createPromptItem(prompt) {
+	const tmp = document.createElement("div")
+	tmp.innerHTML = prompt.content                         // tmp recebe o conteúdo HTML do prompt (temporário)
 	return `
 			<li class="prompt-item" data-id="${prompt.id}" data-action="select">
             	<div class="prompt-item-content">
                     <span class="prompt-item-title">${prompt.title}</span>
-                    <span class="prompt-item-description">${prompt.content}</span>
+                    <span class="prompt-item-description">${tmp.textContent}</span>
                 </div>
+				
 
              	<button class="btn-icon" title="Remover" data-action="remove">
                 	<img src="assets/remove.svg" alt="Remover" class="icon icon-trash" />
@@ -116,8 +126,8 @@ function createPromptItem(prompt) {
             </li>
 			`
 }
-
-function renderList(filterText = "") {
+// Renderiza a lista de prompts, aplicando um filtro se fornecido
+function renderList(filterText = "") { // Renderiza a lista de prompts com filtro
 	const filteredPrompt = state.prompts
 	.filter((prompt) =>
 		prompt.title.toLowerCase().includes(filterText.toLowerCase().trim())
@@ -127,7 +137,7 @@ function renderList(filterText = "") {
 	elements.list.innerHTML = filteredPrompt
 }
 
-function newPrompt() {
+function newPrompt() {                     // Cria um novo prompt
 	state.selectedId = null
 	elements.promptTitle.textContent = ""
 	elements.promptContent.textContent = ""
@@ -135,9 +145,30 @@ function newPrompt() {
 	elements.promptTitle.focus()
 }
 
-												//Evento ==> Filtrar lista ==> Remover item
+function copySelected(){
+	try {
+		const content = elements.promptContent
+		if (!navigator.clipboard) {
+			console.log("A API Clipboard não é suportada neste navegador.")
+			return
+		}
+		if (!content.innerText.trim()) {
+			alert("O conteúdo está vazio. Nada para copiar.")
+			return
+		}
+
+		navigator.clipboard.writeText(content.innerText)
+		
+	} catch (error) {
+		console.log("Erro ao copiar para a área de transferência:", error)
+	}
+
+}
+
+//Evento ==> Filtrar lista ==> Remover item ==> copiar conteúdo
 elements.btnSave.addEventListener("click", save);
 elements.bntNew.addEventListener("click", newPrompt); 
+elements.btnCopy.addEventListener("click", copySelected);
 
 elements.search.addEventListener("input", function (event) {
 	renderList(event.target.value)
@@ -147,9 +178,10 @@ elements.list.addEventListener("click", function (event) {
 	const removeBtn = event.target.closest("[data-action='remove']")
 	const item = event.target.closest("[data-id]")
 
-	if (!item) return
-
+	if (!item) return   // Se não clicar em um item, sai da função
+	
 	const id = item.getAttribute("data-id")
+	state.selectedId = id
 
 	if(removeBtn) {
 		//Remove item
@@ -159,12 +191,13 @@ elements.list.addEventListener("click", function (event) {
 		return
 	}
 
-	if(event.target.closest("[data-action='select']")) {
+	if(event.target.closest("[data-action='select']")) {  
+		//Seleciona item	
 		const prompt = state.prompts.find((p) => p.id === id)
 	
 		if(prompt) {
 		elements.promptTitle.textContent = prompt.title
-		elements.promptContent.textContent = prompt.content
+		elements.promptContent.innerHTML = prompt.content
 		updateAllEditableSltates()
 		}
 	}
@@ -179,6 +212,9 @@ function init() {
 	// Estado inicial: sidebar visível, botão open oculto
 	elements.sidebar.style.display = '';
 	elements.btnOpen.style.display = 'none';
+
+	elements.sidebar.classList.remove("open")
+	elements.sidebar.classList.remove("collapsed")
 
 	// Adiciona eventos para abrir/fechar sidebar
 	elements.btnOpen.addEventListener('click', openSidebar)
