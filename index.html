@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Prompt Menager</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="shortcut icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
@@ -68,6 +68,16 @@
             </div>
         </main>
 
+    </div>
+    <div class="modal-backdrop" id="confirmation-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Confirmar Remoção</h2>
+            <p class="modal-message">Tem certeza que deseja remover este prompt? Esta ação não pode ser desfeita.</p>
+            <div class="modal-actions">
+                <button id="btn-cancel-remove" class="btn-outline btn">Cancelar</button>
+                <button id="btn-confirm-remove" class="btn-primary btn">Remover</button>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

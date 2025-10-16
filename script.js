@@ -3,6 +3,7 @@ const storageKey = "promptsStorage";
 const state = {
 	prompts: [],
 	selectedId: null,
+	idToRemove: null,
 }
 
 const elements = {
@@ -18,6 +19,9 @@ const elements = {
     sidebar: document.querySelector('.sidebar'),
 	list: document.getElementById('prompt-list'),
 	search: document.getElementById('search-input'),
+	modal: document.getElementById('confirmation-modal'),
+    btnConfirmRemove: document.getElementById('btn-confirm-remove'),
+    btnCancelRemove: document.getElementById('btn-cancel-remove'),
 };
 
 // Atualiza o estado do wrapper conforme o conteúdo do elemento
@@ -186,6 +190,9 @@ function copySelected(){
 elements.btnSave.addEventListener("click", save);
 elements.bntNew.addEventListener("click", newPrompt); 
 elements.btnCopy.addEventListener("click", copySelected);
+// Eventos da Modal
+elements.btnConfirmRemove.addEventListener("click", removePromptConfirmed);
+elements.btnCancelRemove.addEventListener("click", closeConfirmationModal);
 
 elements.search.addEventListener("input", function (event) {
 	renderList(event.target.value)
@@ -201,10 +208,8 @@ elements.list.addEventListener("click", function (event) {
 	state.selectedId = id
 
 	if(removeBtn) {
-		//Remove item
-		state.prompts = state.prompts.filter((p) => p.id !== id)
-		renderList(elements.search.value)
-		persist()
+		// Substitui o confirm() nativo pela abertura da modal
+        openConfirmationModal(id); 
 		return
 	}
 
@@ -227,6 +232,40 @@ elements.list.addEventListener("click", function (event) {
 	}
 })
 
+function openConfirmationModal(id) {
+    state.idToRemove = id;
+    elements.modal.classList.add('is-visible');
+}
+
+function closeConfirmationModal() {
+    state.idToRemove = null;
+    elements.modal.classList.remove('is-visible');
+}
+
+// Função de remoção final (será chamada pelo botão 'Remover' da modal)
+function removePromptConfirmed() {
+    const id = state.idToRemove;
+    if (!id) return; // Se não houver ID, saia
+
+    // Lógica de remoção real (copiada da sua função de listener)
+    state.prompts = state.prompts.filter((p) => p.id !== id);
+
+    // Lógica para redefinir o editor se o item deletado for o selecionado
+    if (state.selectedId === id) {
+        newPrompt();
+        if (state.prompts.length > 0) {
+            state.selectedId = state.prompts[0].id;
+        } else {
+            state.selectedId = null;
+        }
+    }
+    
+    // Finaliza
+    renderList(elements.search.value);
+    persist();
+    closeConfirmationModal(); // Fecha a modal após a remoção
+}
+
 	// Função de inicialização
 function init() {
 	load()
@@ -244,6 +283,7 @@ function init() {
 	elements.btnOpen.addEventListener('click', openSidebar)
 	elements.btnCollapse.addEventListener('click', closeSidebar)
 }
+
 
 // Executa a inicialização
 init();

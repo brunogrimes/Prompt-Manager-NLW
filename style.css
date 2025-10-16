@@ -325,3 +325,65 @@ body{
         overflow-y: auto;
     }
 }
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8); 
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; 
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.modal-backdrop.is-visible {
+    display: flex; /* Mostra o backdrop */
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--gray-800);
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 400px;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-backdrop.is-visible .modal-content {
+    transform: translateY(0);
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.modal-message {
+    font-size: 16px;
+    color: var(--gray-100);
+    margin-bottom: 24px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.modal-actions .btn-primary {
+    /* Estilo para o botão de confirmação, usando a cor de alerta para ênfase na remoção */
+    background: var(--alert-600);
+    border: 1px solid var(--alert-600);
+}
+.modal-actions .btn-primary:hover {
+    opacity: 0.9;
+    border-color: var(--white);
+}
