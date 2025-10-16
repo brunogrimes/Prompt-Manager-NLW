@@ -10,7 +10,7 @@
 ---
 
 ## 🚀 Sobre o Projeto
-> 💡 **Nota:** Este projeto foi desenvolvido a partir do evento **NLW Pocket** (Next Level Week Pocket), oferecido pela <a href="https://rocketseat.com.br/" target=_blank">**Rocketseat**.</a>
+> 💡 **Nota:** Este projeto foi desenvolvido a partir do evento **NLW Pocket** (Next Level Week Pocket), oferecido pela <a href="https://rocketseat.com.br/" target=_blank>[**Rocketseat**]</a>.
 
 O **Prompt Manager** é uma aplicação web prática e intuitiva projetada para ser o seu **hub central de produtividade em Inteligência Artificial**. Chega de perder prompts valiosos em notas ou documentos dispersos!
 
