@@ -58,7 +58,7 @@ Durante o desenvolvimento, priorizei a aplicação das seguintes boas práticas 
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/brunogrimes/Prompt-Menager-NLW.git](https://github.com/brunogrimes/Prompt-Menager-NLW.git)
+    git clone [https://github.com/brunogrimes/Prompt-Manager-NLW.git](https://github.com/brunogrimes/Prompt-Manager-NLW.git)
     ```
 2.  **Entre na pasta do projeto:**
     ```bash
