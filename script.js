@@ -190,6 +190,12 @@ function copySelected(){
 elements.btnSave.addEventListener("click", save);
 elements.bntNew.addEventListener("click", newPrompt); 
 elements.btnCopy.addEventListener("click", copySelected);
+elements.bntNew.addEventListener("click", function() {
+    newPrompt();
+	if (window.innerWidth <= 950) {
+        closeSidebar(); 
+    }
+});
 // Eventos da Modal
 elements.btnConfirmRemove.addEventListener("click", removePromptConfirmed);
 elements.btnCancelRemove.addEventListener("click", closeConfirmationModal);
